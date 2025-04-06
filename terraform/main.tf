@@ -14,14 +14,14 @@ resource "aws_iam_role" "rl-ltprep-lambda-exec" {
 }
 
 resource "aws_iam_role_policy_attachment" "pl-ltprep-lambda-exec" {
-  role       = aws_iam_role.lambda_exec.name
+  role       = aws_iam_role.rl-ltprep-lambda-exec.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
 resource "aws_lambda_function" "lm-ltprep-hello" {
-  function_name = "hello_lambda"
+  function_name = "lm-ltprep-hello"
   runtime       = "nodejs22.x"
-  role          = aws_iam_role.lambda_exec.arn
+  role          = aws_iam_role.rl-ltprep-lambda-exec.arn
   handler       = "index.handler"
   filename      = "${path.module}/../index.zip"
   source_code_hash = filebase64sha256("${path.module}/../index.zip")

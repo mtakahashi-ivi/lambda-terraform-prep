@@ -2,18 +2,25 @@ LAMBDA_DIR=lambda
 DIST_DIR=dist
 ZIP_NAME=index.zip
 
-.PHONY: build zip plan apply clean test-local
+.PHONY: build zip zip-prune zip-package plan apply clean test-local
 
-build:
+install-node-modules:
+	cd $(LAMBDA_DIR) && npm install
+
+build: install-node-modules
 	cd $(LAMBDA_DIR) && node build.mjs
 
-zip: build
-	cd $(LAMBDA_DIR) && \
-	rm -rf ../$(DIST_DIR) && mkdir -p ../$(DIST_DIR)/package && \
-	npm install --omit=dev --prefix ../$(DIST_DIR)/package && \
-	node build.mjs && \
-	cp ../$(DIST_DIR)/index.js ../$(DIST_DIR)/package/ && \
-	cd ../$(DIST_DIR)/package && zip -r ../../$(ZIP_NAME) .
+zip: clean zip-prune zip-package
+
+zip-prune: build
+	cd $(LAMBDA_DIR) && npm prune  --omit=dev
+
+$(DIST_DIR)/package:
+	mkdir -p $(DIST_DIR)/package
+
+zip-package: $(DIST_DIR)/package
+	cp $(DIST_DIR)/*.js $(DIST_DIR)/package/
+	cd $(DIST_DIR)/package && zip -r ../../$(ZIP_NAME) .
 
 plan:
 	cd terraform && terraform plan
@@ -25,4 +32,4 @@ test-local: build
 	node $(LAMBDA_DIR)/test.mjs
 
 clean:
-	rm -rf $(DIST_DIR) $(ZIP_NAME) .terraform terraform.tfstate*
+	rm -rf $(DIST_DIR) $(ZIP_NAME)

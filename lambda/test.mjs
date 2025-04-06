@@ -1,8 +1,8 @@
-import { sayHello } from '../dist/hello.js';
+import { handler } from '../dist/index.js';
 
-const main = () => {
-  const message = sayHello();
-  console.log('sayHello returned:', message);
+const main = async () => {
+  const result = await handler();
+  console.log('handler returned:', result);
 };
 
 main();
