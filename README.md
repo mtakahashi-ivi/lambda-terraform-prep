@@ -81,6 +81,7 @@ aws_region  = "ap-northeast-1"
 | `make zip`           | Lambda 用パッケージ作成（build + prune + zip）       |
 | `make plan`          | Terraform プラン表示                                  |
 | `make apply`         | Terraform 適用（-auto-approve なし）                  |
+| `make destroy`       | Terraform によるインフラの削除                      |
 | `make test-local`    | ローカルで sayHello 関数をテスト実行                  |
 | `make clean`         | zip や dist、state ファイルのクリーンアップ           |
 

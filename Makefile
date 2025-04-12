@@ -28,6 +28,9 @@ plan:
 apply:
 	cd terraform && terraform apply
 
+destroy:
+	cd terraform && terraform destroy
+
 test-local: build
 	node $(LAMBDA_DIR)/test.mjs
 
